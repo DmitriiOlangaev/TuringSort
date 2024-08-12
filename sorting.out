@@ -1,0 +1,153 @@
+2
+
+S 0 _ -> check 0 > _ ^
+S 1 _ -> check 1 > _ ^
+
+check 0 _ -> check 0 > _ ^
+check 1 _ -> check 1 > _ ^
+check # _ -> mark # < _ ^
+check _ _ -> mark _ < _ ^
+check | _ -> good | < _ ^
+
+mark 0 _ -> mark 0 < _ ^
+mark 1 _ -> mark 1 < _ ^
+mark | _ -> goLeft # < _ ^
+mark _ _ -> finalGoRight _ > _ ^
+
+goLeft 0 _ -> goLeft 0 < _ ^
+goLeft 1 _ -> goLeft 1 < _ ^
+goLeft | _ -> goLeft | < _ ^
+goLeft _ _ -> S _ > _ ^
+
+finalGoRight 0 _ -> finalGoRight 0 > _ ^
+finalGoRight 1 _ -> finalGoRight 1 > _ ^
+finalGoRight # _ -> finalGoRight | > _ ^
+finalGoRight _ _ -> final _ < _ ^
+
+final 0 _ -> final 0 < _ ^
+final 1 _ -> final 1 < _ ^
+final | _ -> final | < _ ^
+final _ _ -> AC _ > _ ^
+
+good 0 _ -> good 0 < _ ^
+good 1 _ -> good 1 < _ ^
+good | _ -> begin | > _ ^
+good _ _ -> begin _ > _ ^
+
+begin 0 _ -> begin 0 > 0 >
+begin 1 _ -> begin 1 > 1 >
+begin | _ -> compare | > _ <
+
+compare 0 0 -> compare 0 ^ 0 <
+compare 0 1 -> compare 0 ^ 1 <
+compare 1 0 -> compare 1 ^ 0 <
+compare 1 1 -> compare 1 ^ 1 <
+compare 0 _ -> startCompare 0 ^ _ >
+compare 1 _ -> startCompare 1 ^ _ >
+
+startCompare 0 0 -> startCompare 0 > 0 >
+startCompare 1 1 -> startCompare 1 > 1 >
+startCompare 0 1 -> rightMayLess 0 > 1 >
+startCompare 1 0 -> rightMayGreater 1 > 0 >
+startCompare 0 _ -> rightGreater 0 > _ ^
+startCompare 1 _ -> rightGreater 1 > _ ^
+startCompare _ 0 -> rightLess _ ^ 0 >
+startCompare _ 1 -> rightLess _ ^ 1 >
+startCompare | 0 -> rightLess | ^ 0 >
+startCompare | 1 -> rightLess | ^ 1 >
+startCompare # 0 -> rightLess # ^ 0 >
+startCompare # 1 -> rightLess # ^ 1 >
+startCompare _ _ -> rightGreater _ ^ _ ^
+startCompare | _ -> rightGreater | ^ _ ^
+startCompare # _ -> rightGreater # ^ _ ^
+
+
+rightMayLess 0 0 -> rightMayLess 0 > 0 >
+rightMayLess 1 1 -> rightMayLess 1 > 1 >
+rightMayLess 0 1 -> rightMayLess 0 > 1 >
+rightMayLess 1 0 -> rightMayLess 1 > 0 >
+rightMayLess | 0 -> rightLess | ^ 0 >
+rightMayLess | 1 -> rightLess | ^ 1 >
+rightMayLess # 0 -> rightLess # ^ 0 >
+rightMayLess # 1 -> rightLess # ^ 1 >
+rightMayLess _ 0 -> rightLess _ ^ 0 >
+rightMayLess _ 1 -> rightLess _ ^ 1 >
+rightMayLess 0 _ -> rightGreater 0 > _ ^
+rightMayLess 1 _ -> rightGreater 1 > _ ^
+rightMayLess | _ -> rightLess | ^ _ ^
+rightMayLess _ _ -> rightLess _ ^ _ ^
+rightMayLess # _ -> rightLess # ^ _ ^
+
+rightMayGreater 0 0 -> rightMayGreater 0 > 0 >
+rightMayGreater 1 1 -> rightMayGreater 1 > 1 >
+rightMayGreater 0 1 -> rightMayGreater 0 > 1 >
+rightMayGreater 1 0 -> rightMayGreater 1 > 0 >
+rightMayGreater | 0 -> rightLess | ^ 0 >
+rightMayGreater | 1 -> rightLess | ^ 1 >
+rightMayGreater _ 0 -> rightLess _ ^ 0 >
+rightMayGreater _ 1 -> rightLess _ ^ 1 >
+rightMayGreater # 0 -> rightLess # ^ 0 >
+rightMayGreater # 1 -> rightLess # ^ 1 >
+rightMayGreater 0 _ -> rightGreater 0 > _ ^
+rightMayGreater 1 _ -> rightGreater 1 > _ ^
+rightMayGreater | _ -> rightGreater | ^ _ ^
+rightMayGreater _ _ -> rightGreater _ ^ _ ^
+rightMayGreater # _ -> rightGreater # ^ _ ^
+
+
+rightGreater 0 _ -> rightGreater 0 > _ ^
+rightGreater 1 _ -> rightGreater 1 > _ ^
+rightGreater _ _ -> clean _ ^ _ <
+rightGreater # _ -> clean # ^ _ <
+rightGreater | _ -> clean | ^ _ <
+
+clean _ 0 -> clean _ ^ _ <
+clean _ 1 -> clean _ ^ _ <
+clean | 0 -> clean | ^ _ <
+clean | 1 -> clean | ^ _ <
+clean # 0 -> clean # ^ _ <
+clean # 1 -> clean # ^ _ <
+clean _ _ -> goToNumber _ < _ ^
+clean | _ -> goToNumber | < _ ^
+clean # _ -> goToNumber # < _ ^
+
+goToNumber 0 _ -> goToNumber 0 < _ ^
+goToNumber 1 _ -> goToNumber 1 < _ ^
+goToNumber | _ -> S | > _ ^
+goToNumber _ _ -> S _ > _ ^
+
+rightLess _ 0 -> rightLess _ ^ 0 >
+rightLess _ 1 -> rightLess _ ^ 1 >
+rightLess | 0 -> rightLess | ^ 0 >
+rightLess | 1 -> rightLess | ^ 1 >
+rightLess # 0 -> rightLess # ^ 0 >
+rightLess # 1 -> rightLess # ^ 1 >
+rightLess _ _ -> copy _ < _ <
+rightLess | _ -> copy | < _ <
+rightLess # _ -> copy # < _ <
+
+copy 0 0 -> copy 0 ^ 0 <
+copy 0 1 -> copy 0 ^ 1 <
+copy 1 0 -> copy 1 ^ 0 <
+copy 1 1 -> copy 1 ^ 1 <
+copy 0 _ -> ready 0 ^ | <
+copy 1 _ -> ready 1 ^ | <
+
+ready 0 _ -> ready _ < 0 <
+ready 1 _ -> ready _ < 1 <
+ready | _ -> skip _ < _ ^
+
+skip 0 _ -> skip _ < _ ^
+skip 1 _ -> skip _ < _ ^
+skip | _ -> write | > _ >
+skip _ _ -> write _ > _ >
+
+write _ 0 -> write 0 > _ >
+write _ 1 -> write 1 > _ >
+write _ | -> write | > _ >
+write | _ -> goToNumber | < _ ^
+write _ _ -> goToNumber _ < _ ^
+write # _ -> goToNumber # < _ ^
+
+
+
